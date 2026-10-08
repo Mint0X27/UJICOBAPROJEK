@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/constants.dart';
 import 'register_screen.dart';
-import 'forgot_password_screen.dart'; // <-- Import halaman baru
+import 'forgot_password_screen.dart';
+import '../home/home_screen.dart'; // <-- Import Home Screen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
+    // Validasi form kosong
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -40,16 +42,18 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    // Mulai loading
     setState(() => _isLoading = true);
 
+    // Simulasi proses login 2 detik, lalu masuk ke Home
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login berhasil! (Simulasi)'),
-            backgroundColor: AppColors.success,
-          ),
+
+        // NAVIGASI KE HOME SCREEN SETELAH LOGIN BERHASIL
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       }
     });
@@ -117,7 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 8),
 
-              // Lupa Password (Sudah terhubung ke ForgotPasswordScreen)
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
