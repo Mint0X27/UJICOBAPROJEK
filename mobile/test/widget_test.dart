@@ -1,30 +1,71 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 
-import 'package:mobile/main.dart';
+import '../lib/riana/ChatTampilan.dart';
+import '../lib/riana/ProfilAdmin.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  runApp(const KostRadarPreview());
+}
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+class KostRadarPreview extends StatefulWidget {
+  const KostRadarPreview({super.key});
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  @override
+  State<KostRadarPreview> createState() =>
+      _KostRadarPreviewState();
+}
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+class _KostRadarPreviewState
+    extends State<KostRadarPreview> {
+  int selectedIndex = 0;
+
+  final List<Widget> pages = const [
+    ChatTampilan(),
+    ProfilAdmin(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'KostRadar Admin',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1976D2),
+        ),
+      ),
+      home: Scaffold(
+        body: pages[selectedIndex],
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: selectedIndex,
+          onDestinationSelected: (index) {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(
+                Icons.chat_bubble_outline,
+              ),
+              selectedIcon: Icon(
+                Icons.chat_bubble,
+              ),
+              label: 'Chat',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                Icons.person_outline,
+              ),
+              selectedIcon: Icon(
+                Icons.person,
+              ),
+              label: 'Profil',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
